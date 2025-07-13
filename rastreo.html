@@ -126,6 +126,8 @@
     </main>
 
     <script>
+const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+
 window.onload = async function() {
   // Obtener rastreo guardado desde index.html
   const rastreo = JSON.parse(localStorage.getItem('rastreo_consulta'));
@@ -135,7 +137,7 @@ window.onload = async function() {
   }
   // Consultar datos actualizados al backend
   try {
-    const res = await fetch(`http://localhost:5000/rastreos/${rastreo.documento}`);
+    const res = await fetch(`${API_BASE}/rastreos/${rastreo.documento}`);
     if (!res.ok) throw new Error('No se pudo consultar el rastreo');
     const rastreos = await res.json();
     const datos = rastreos.find(r => r.numero_guia === rastreo.numero_guia);

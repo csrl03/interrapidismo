@@ -198,5 +198,9 @@ def eliminar_rastreo(id_rastreo):
     conn.close()
     return jsonify({'status': 'ok'})
 
+@app.route('/')
+def index():
+    return 'API online'
+
 if __name__ == '__main__':
     app.run(debug=True)

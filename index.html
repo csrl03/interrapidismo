@@ -33,6 +33,8 @@
   </div>
 
   <script>
+    const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+
     function mostrarCampos() {
       const guia = document.getElementById('guiaInput').value.trim();
       const campos = document.getElementById('camposAdicionales');
@@ -49,7 +51,7 @@
       }
       try {
         // Consultar rastreo en backend
-        const res = await fetch(`http://localhost:5000/rastreos/${documento}`);
+        const res = await fetch(`${API_BASE}/rastreos/${documento}`);
         if (!res.ok) throw new Error('Documento no encontrado');
         const rastreos = await res.json();
         const rastreo = rastreos.find(r => r.numero_guia === guia);

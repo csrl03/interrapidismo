@@ -94,6 +94,7 @@
     if (!token) {
       window.location.href = 'login.html';
     }
+    const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
     let documentoActual = null;
     let guiaActual = null;
     let rastreosPrevios = [];
@@ -112,7 +113,7 @@
 
     async function refreshRastreosPreviosAndSelect(guia) {
       try {
-        const res = await fetch(`http://localhost:5000/rastreos/${documentoActual}`, {
+        const res = await fetch(`${API_BASE}/rastreos/${documentoActual}`, {
           headers: { Authorization: 'Bearer ' + token }
         });
         if (!res.ok) throw new Error('No se pudo consultar rastreos');
@@ -192,7 +193,7 @@
         return;
       }
       try {
-        const res = await fetch('http://localhost:5000/rastreos', {
+        const res = await fetch(`${API_BASE}/rastreos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -225,7 +226,7 @@
       };
       acts.push(act);
       try {
-        const res = await fetch(`http://localhost:5000/rastreos/actualizacion/${rastreo.id}`, {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -251,7 +252,7 @@
       if (!confirm('¿Seguro que desea eliminar esta actualización?')) return;
       acts.splice(idx, 1);
       try {
-        const res = await fetch(`http://localhost:5000/rastreos/actualizacion/${rastreo.id}`, {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -271,7 +272,7 @@
       const rastreo = rastreosPrevios[idx];
       if (!rastreo) return;
       try {
-        const res = await fetch(`http://localhost:5000/rastreos/actualizacion/${rastreo.id}`, {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
           method: 'DELETE',
           headers: { Authorization: 'Bearer ' + token }
         });
