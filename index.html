@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inter Rapidísimo - Rastreo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="tracker-box">
+      <img src="logo.png" alt="Logo Interrapidísimo" class="logo">
+      <h2>Rastrea tu Envío</h2>
+      <hr class="divider">
+      
+      <input type="text" placeholder="Ingrese Guía" class="tracking-input" id="guiaInput" oninput="mostrarCampos()">
+
+      <div id="camposAdicionales" class="hidden">
+        <input type="text" placeholder="Ingrese Número de Documento" class="tracking-input">
+        <button class="btn-buscar">Buscar</button>
+      </div>
+    </div>
+
+    <p class="description">
+      Interrapidísimo es una empresa colombiana de mensajería y logística que se dedica a la recolección, transporte y entrega de envíos de documentos, cartas, tarjetas, impresos, periódicos, muestras de mercadería y pequeños paquetes. También ofrece servicios de transporte de carga, conectando puerta a puerta a los 1.103 municipios del país.
+    </p>
+
+    <div class="logos">
+      <img src="mintic.png" alt="MINTIC">
+      <img src="industria.png" alt="SIC">
+      <img src="vigilado.png" alt="SuperTransporte">
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+
+    function mostrarCampos() {
+      const guia = document.getElementById('guiaInput').value.trim();
+      const campos = document.getElementById('camposAdicionales');
+      campos.classList.toggle('hidden', guia === '');
+    }
+
+    document.querySelector('.btn-buscar').onclick = async function() {
+      const guia = document.getElementById('guiaInput').value.trim();
+      const docInput = document.querySelector('#camposAdicionales input');
+      const documento = docInput.value.trim();
+      if (!guia || !documento) {
+        alert('Debe ingresar ambos campos.');
+        return;
+      }
+      try {
+        // Consultar rastreo en backend
+        const res = await fetch(`${API_BASE}/rastreos/${documento}`);
+        if (!res.ok) throw new Error('Documento no encontrado');
+        const rastreos = await res.json();
+        const rastreo = rastreos.find(r => r.numero_guia === guia);
+        if (!rastreo) {
+          alert('No existe un rastreo con esa guía para el documento ingresado.');
+          return;
+        }
+        // Guardar datos en localStorage para rastreo.html
+        localStorage.setItem('rastreo_consulta', JSON.stringify(rastreo));
+        window.location.href = 'rastreo.html';
+      } catch (err) {
+        alert('No se encontró información para los datos ingresados.');
+      }
+    };
+  </script>
+</body>
+</html>

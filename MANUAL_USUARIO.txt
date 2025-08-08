@@ -1,0 +1,168 @@
+MANUAL DE USUARIO - SISTEMA DE RASTREO INTER RAPIDÍSIMO
+================================================================
+
+PROPÓSITO DEL SISTEMA
+El sistema de rastreo Inter Rapidísimo permite la gestión integral de envíos, proporcionando tanto a administradores como a usuarios finales las herramientas necesarias para el seguimiento completo de paquetes y documentos desde su admisión hasta su entrega final.
+
+MÓDULOS DEL SISTEMA
+- Módulo de Administración: Gestión completa de envíos y actualizaciones de estado
+- Módulo de Consulta Pública: Rastreo de envíos para usuarios finales
+
+================================================================
+MANUAL PARA ADMINISTRADORES
+================================================================
+
+ACCESO AL SISTEMA ADMINISTRATIVO
+
+1. Autenticación (login.html)
+   - Ingrese sus credenciales de administrador
+   - Usuario: Su nombre de usuario asignado
+   - Contraseña: Su contraseña de acceso
+   - El sistema validará las credenciales y le otorgará acceso al panel administrativo
+
+2. Panel de Administración (datosingresos.html)
+
+GESTIÓN DE DOCUMENTOS Y ENVÍOS
+
+1. Selección de Documento
+   - Ingrese el número de documento (cédula) del cliente
+   - Presione "Añadir/Seleccionar Documento"
+   - El sistema mostrará todos los envíos asociados a ese documento
+
+2. Visualización de Envíos Existentes
+   - Se mostrará una tabla con todas las guías asociadas al documento
+   - La tabla incluye: Número de guía, Destino, y opciones de acción
+   - Cada registro tendrá dos botones disponibles:
+     * "Seleccionar": Para gestionar actualizaciones del envío
+     * "Eliminar": Para remover el envío del sistema
+
+3. Creación de Nuevo Envío
+   Al presionar "Añadir/Seleccionar Documento", aparecerá un formulario con los siguientes campos:
+
+   INFORMACIÓN DEL ENVÍO:
+   - Número de Guía: Código único del envío
+   - Fecha de Admisión: Fecha de recepción del envío
+   - Fecha Estimada de Entrega: Fecha proyectada de entrega
+
+   DATOS DEL DESTINATARIO:
+   - Nombre: Nombre completo del destinatario
+   - Cédula: Número de identificación del destinatario
+   - Ciudad de Destino: Ciudad donde se realizará la entrega
+   - Dirección: Dirección completa de entrega
+   - Teléfono: Número de contacto del destinatario
+
+   DATOS DEL REMITENTE:
+   - Nombre: Nombre completo del remitente
+   - Ciudad de Origen: Ciudad donde se origina el envío
+   - Teléfono: Número de contacto del remitente
+   - Cédula: Número de identificación del remitente
+   - Dirección: Dirección del remitente
+
+   INFORMACIÓN ADICIONAL:
+   - Tipo de Empaque: Descripción del tipo de empaque utilizado
+
+4. Gestión de Actualizaciones de Estado
+   Al seleccionar una guía existente, se habilitará la sección "Rastreo del Envío":
+
+   CAMPOS PARA NUEVA ACTUALIZACIÓN:
+   - Ciudad: Ciudad donde ocurre la actualización
+   - Estado: Estado actual del envío (En tránsito, En bodega, Entregado, etc.)
+   - Motivo: Razón específica del estado (opcional)
+   - Fecha: Fecha y hora de la actualización
+   - Coordenada: Ubicación geográfica o referencia
+
+   FUNCIONALIDADES:
+   - "Añadir Actualización": Registra una nueva actualización en el historial
+   - Tabla de seguimiento: Muestra todas las actualizaciones del envío
+   - Opción de eliminación: Permite remover actualizaciones específicas
+
+FLUJO DE TRABAJO RECOMENDADO
+
+1. Ingrese el número de documento del cliente
+2. Verifique si existen envíos previos para ese cliente
+3. Para envío nuevo: Complete todos los campos del formulario y guarde
+4. Para actualización: Seleccione la guía correspondiente
+5. Añada las actualizaciones de estado según el progreso del envío
+6. Mantenga actualizado el estado hasta la entrega final
+
+================================================================
+MANUAL PARA USUARIOS FINALES
+================================================================
+
+CONSULTA PÚBLICA DE ENVÍOS (index.html)
+
+El sistema permite a los usuarios consultar el estado de sus envíos de manera autónoma:
+
+PROCESO DE CONSULTA:
+
+1. Acceso al Sistema
+   - Visite la página principal del sistema de rastreo
+   - No requiere registro ni autenticación
+
+2. Ingreso de Datos
+   - Campo "Ingrese Guía": Escriba el número de guía de su envío
+   - Al ingresar la guía, aparecerá automáticamente el campo de documento
+   - Campo "Número de Documento": Ingrese su número de cédula
+
+3. Realización de Búsqueda
+   - Presione el botón "Buscar"
+   - El sistema validará la información ingresada
+   - Si los datos son correctos, será redirigido a la página de resultados
+
+4. Visualización de Resultados (rastreo.html)
+   La página de resultados mostrará:
+
+   INFORMACIÓN GENERAL:
+   - Número de guía del envío
+   - Fecha y hora de admisión
+   - Fecha estimada de entrega
+   - Estado actual del envío
+
+   DATOS DEL DESTINATARIO:
+   - Nombre completo
+   - Número de cédula
+   - Ciudad de destino
+   - Dirección de entrega
+   - Teléfono de contacto
+
+   DATOS DEL REMITENTE:
+   - Nombre completo
+   - Ciudad de origen
+   - Teléfono de contacto
+   - Número de cédula
+
+   INFORMACIÓN DEL ENVÍO:
+   - Tipo de empaque utilizado
+
+   HISTORIAL DE RASTREO:
+   - Tabla completa con todas las actualizaciones del envío
+   - Incluye: Ciudad, Estado, Motivo, Fecha y Coordenada
+   - Ordenado cronológicamente desde la admisión hasta el estado actual
+
+RECOMENDACIONES PARA USUARIOS
+
+- Conserve su número de guía en lugar seguro
+- Verifique que el número de documento coincida con el registrado en el envío
+- Consulte regularmente para conocer el progreso de su envío
+- En caso de inconsistencias, contacte al servicio al cliente
+
+================================================================
+CONSIDERACIONES TÉCNICAS
+================================================================
+
+SEGURIDAD DEL SISTEMA:
+- El módulo administrativo requiere autenticación obligatoria
+- Las consultas públicas no requieren autenticación
+- Todos los datos se validan antes del procesamiento
+
+DISPONIBILIDAD:
+- El sistema está disponible las 24 horas del día
+- Las actualizaciones se reflejan en tiempo real
+- Compatible con navegadores web modernos
+
+SOPORTE TÉCNICO:
+Para asistencia técnica o reportar problemas del sistema, contacte al administrador del sistema.
+
+================================================================
+FIN DEL MANUAL
+================================================================

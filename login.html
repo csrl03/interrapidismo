@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Administrador - Inter Rapidísimo</title>
+  <link rel="stylesheet" href="stylesDatos.css">
+  <style>
+    .login-container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 32px 28px; }
+    .login-container h2 { color: #f0572d; margin-bottom: 18px; }
+    .login-container label { font-weight: bold; }
+    .login-container input { width: 100%; padding: 8px 10px; margin-bottom: 14px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; }
+    .login-container .btn { width: 100%; }
+    .login-error { color: #d94b25; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Acceso Administrador</h2>
+    <div id="loginError" class="login-error" style="display:none;"></div>
+    <form id="loginForm">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" required placeholder="Usuario">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" required placeholder="Contraseña">
+      <button type="submit" class="btn">Ingresar</button>
+    </form>
+  </div>
+  <script>
+    const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+
+    document.getElementById('loginForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const usuario = document.getElementById('usuario').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('loginError');
+      errorDiv.style.display = 'none';
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre_usuario: usuario, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.rol === 'admin' && data.token) {
+          localStorage.setItem('admin_token', data.token);
+          window.location.href = 'datosingresos.html';
+        } else {
+          errorDiv.textContent = data.error || 'Acceso denegado';
+          errorDiv.style.display = 'block';
+        }
+      } catch {
+        errorDiv.textContent = 'Error de conexión con el servidor.';
+        errorDiv.style.display = 'block';
+      }
+    };
+  </script>
+</body>
+</html>

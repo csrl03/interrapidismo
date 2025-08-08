@@ -1,0 +1,113 @@
+/* stylesDatos.css - Estilos para la página de administración de datos de ingresos */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #e5f1f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.admin-container {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 32px 28px;
+  max-width: 800px;
+  width: 100%;
+  margin: 30px auto;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.admin-header img {
+  max-width: 120px;
+}
+
+.admin-header h2 {
+  color: #f0572d;
+  margin: 0;
+}
+
+hr.divider {
+  border: 1px solid #f0572d;
+  margin: 18px 0;
+}
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.btn {
+  background-color: #f0572d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn:hover {
+  background-color: #d94b25;
+}
+
+.table-section {
+  margin-top: 30px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.data-table th, .data-table td {
+  border: 1px solid #e5e5e5;
+  padding: 8px 6px;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: #f0572d;
+  color: #fff;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 700px) {
+  .admin-container {
+    padding: 12px 2vw;
+  }
+  .admin-header img {
+    max-width: 80px;
+  }
+}

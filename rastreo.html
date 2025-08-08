@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Envío - Rapidísimo</title>
+    <link rel="stylesheet" href="stylesR.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="page-header">
+        <img src="logo2.png" alt="Logo Rapidísimo" class="logo">
+    </header>
+
+    <main class="container">
+
+        <section class="tracking-summary">
+            <div class="summary-header">
+                <span>Guía y/o Factura:</span>
+                <span class="guide-number">GG123456789CO</span>
+            </div>
+
+            <div class="status-bar">
+                ESTADO: ENTREGA EXITOSA
+            </div>
+
+            <div class="info-block">
+                <h3>INFORMACIÓN GENERAL</h3>
+                <div class="content">
+                    <p><strong>Fecha y hora de Admisión:</strong> <span id="admission-date">2021-07-01 10:17</span></p>
+                    <p><strong>Fecha estimada de entrega:</strong> <span id="estimated-date">2021-07-02</span></p>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <h3>DESTINATARIO</h3>
+                <div class="content">
+                    <p><strong>Nombre:</strong> <span id="dest-name">Juan Pérez</span></p>
+                    <p><strong>Cédula:</strong> <span id="dest-cedula">1234567890</span></p>
+                    <p><strong>Ciudad Destino:</strong> <span id="dest-city">BELLO/ANT/COL</span></p>
+                    <p><strong>Dirección:</strong> <span id="dest-address">Calle Falsa 123, Apto 404</span></p>
+                    <p><strong>Teléfono:</strong> <span id="dest-phone">3161234567</span></p>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <h3>REMITENTE</h3>
+                <div class="content">
+                    <p><strong>Nombre:</strong> <span id="origin-name">TIENDA ABC S.A.S - 900843898</span></p>
+                    <p><strong>Ciudad origen:</strong> <span id="origin-city">BOGOTA/CUND/COL</span></p>
+                    <p><strong>Teléfono:</strong> <span id="origin-phone">3161234567</span></p>
+                    <p><strong>Cédula:</strong> <span id="origin-cedula">0987654321</span></p>
+                </div>
+            </div>
+
+             <div class="info-block">
+                <h3>DATOS DE ENVÍO</h3>
+                <div class="content">
+                    <p><strong>Tipo empaque:</strong> <span id="package-type">SOBRE CARTA</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="tracking-history">
+            <h2>RASTREO DEL ENVÍO</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CIUDAD</th>
+                            <th>ESTADO</th>
+                            <th>MOTIVO</th>
+                            <th>FECHA</th>
+                            <th>COORDINADA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BOGOTA (CUND) COL</td>
+                            <td>Envío Admitido</td>
+                            <td>-</td>
+                            <td>2021-07-01</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>BOGOTA</td>
+                            <td>Ingresado a Bodega</td>
+                            <td>-</td>
+                            <td>2021-07-02</td>
+                            <td>-</td>
+                        </tr>
+                         <tr>
+                            <td>BOGOTA</td>
+                            <td>Viajando en Ruta Nacional</td>
+                            <td>-</td>
+                            <td>2021-07-02</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>MEDELLIN</td>
+                            <td>Ingresado a Bodega</td>
+                            <td>-</td>
+                            <td>2021-07-03</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>MEDELLIN</td>
+                            <td>En Distribución Urbana</td>
+                            <td>-</td>
+                            <td>2021-07-06</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>BELLO (ANT) COL</td>
+                            <td>Entrega Exitosa</td>
+                            <td>-</td>
+                            <td>2021-07-06</td>
+                            <td>📍</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+
+window.onload = async function() {
+  // Obtener rastreo guardado desde index.html
+  const rastreo = JSON.parse(localStorage.getItem('rastreo_consulta'));
+  if (!rastreo) {
+    alert('No hay datos de rastreo para mostrar.');
+    return;
+  }
+  // Consultar datos actualizados al backend
+  try {
+    const res = await fetch(`${API_BASE}/rastreos/${rastreo.documento}`);
+    if (!res.ok) throw new Error('No se pudo consultar el rastreo');
+    const rastreos = await res.json();
+    const datos = rastreos.find(r => r.numero_guia === rastreo.numero_guia);
+    if (!datos) throw new Error('No se encontró el rastreo');
+    // Llenar campos generales
+    document.querySelector('.guide-number').textContent = datos.numero_guia;
+    document.getElementById('admission-date').textContent = datos.admision || '-';
+    document.getElementById('estimated-date').textContent = datos.estimada || '-';
+    document.getElementById('dest-name').textContent = datos.destino_nombre || '-';
+    document.getElementById('dest-cedula').textContent = datos.destino_cedula || '-';
+    document.getElementById('dest-city').textContent = datos.destino_ciudad || '-';
+    document.getElementById('dest-address').textContent = datos.destino_direccion || '-';
+    document.getElementById('dest-phone').textContent = datos.destino_telefono || '-';
+    document.getElementById('origin-name').textContent = datos.origen_nombre || '-';
+    document.getElementById('origin-city').textContent = datos.origen_ciudad || '-';
+    document.getElementById('origin-phone').textContent = datos.origen_telefono || '-';
+    document.getElementById('origin-cedula').textContent = datos.origen_cedula || '-';
+    document.getElementById('package-type').textContent = datos.empaque || '-';
+    // Llenar tabla de actualizaciones y estado
+    let actualizaciones = [];
+    try {
+      actualizaciones = JSON.parse(datos.actualizaciones) || [];
+    } catch { actualizaciones = []; }
+    const tbody = document.querySelector('.tracking-history tbody');
+    tbody.innerHTML = '';
+    actualizaciones.forEach(act => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${act.ciudad||'-'}</td><td>${act.estado||'-'}</td><td>${act.motivo||'-'}</td><td>${act.fecha||'-'}</td><td>${act.coordenada||'-'}</td>`;
+      tbody.appendChild(tr);
+    });
+    // Ajuste 1: Estado real del pedido
+    const statusBar = document.querySelector('.status-bar');
+    if (actualizaciones.length > 0) {
+      const ultimoEstado = actualizaciones[actualizaciones.length - 1].estado || '-';
+      statusBar.textContent = 'ESTADO: ' + ultimoEstado.toUpperCase();
+    } else {
+      statusBar.textContent = 'ESTADO: SIN ACTUALIZACIONES';
+    }
+  } catch (err) {
+    alert('No se pudo cargar la información del rastreo.');
+  }
+};
+</script>
+
+</body>
+</html>

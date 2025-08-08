@@ -1,0 +1,128 @@
+/* --- RESET BÁSICO Y CONFIGURACIÓN GENERAL --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #EFEFEF; /* Un fondo gris claro para que resalten los contenedores */
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+/* --- ESTILOS DEL ENCABEZADO Y LOGO --- */
+.page-header {
+    background-color: #000000;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.logo {
+    max-width: 280px; /* Ajusta el tamaño del logo */
+    height: auto;
+}
+
+/* --- ESTILOS DEL BLOQUE DE RESUMEN DEL ENVÍO --- */
+.tracking-summary {
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    margin-bottom: 30px;
+    overflow: hidden; /* Para contener los bordes de los hijos */
+}
+
+.summary-header {
+    background-color: #333333;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.summary-header .guide-number {
+    color: #A8E000; /* Color verde característico */
+    margin-left: 10px;
+}
+
+.status-bar {
+    background-color: #000000;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.info-block h3 {
+    background-color: #666666;
+    color: #FFFFFF;
+    padding: 8px 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.info-block .content {
+    padding: 15px 20px;
+}
+
+.info-block p {
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.info-block p strong {
+    font-weight: bold;
+    color: #000;
+    min-width: 200px; /* Alinea los valores */
+    margin-right: 10px;
+}
+
+/* --- ESTILOS DE LA TABLA DE HISTORIAL --- */
+.tracking-history h2 {
+    background-color: #000000;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.table-container {
+    overflow-x: auto; /* Permite scroll horizontal en pantallas pequeñas */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+}
+
+thead {
+    background-color: #222222;
+    color: #FFFFFF;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #F8F8F8; /* Estilo "cebra" para mejor legibilidad */
+}
+
+tbody tr:last-child {
+    font-weight: bold; /* Destaca la última entrada */
+}
+
+td:last-child {
+    text-align: center;
+}

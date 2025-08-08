@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administración de Ingresos - Inter Rapidísimo</title>
+  <link rel="stylesheet" href="stylesDatos.css">
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <img src="logo.png" alt="Logo Interrapidísimo">
+      <h2>Panel de Administración</h2>
+    </div>
+    <hr class="divider">
+    <form id="formDocumento" class="form-section">
+      <label for="documento">Número de Documento</label>
+      <input type="text" id="documento" required placeholder="Ingrese número de documento">
+      <button type="submit" class="btn">Añadir/Seleccionar Documento</button>
+    </form>
+    <div id="rastreosPrevios" class="form-section" style="display:none;">
+      <h3>Rastreos asociados</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Guía</th>
+            <th>Destino</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tablaPrevios"></tbody>
+      </table>
+    </div>
+    <form id="formRastreo" class="form-section" style="display:none;">
+      <label for="guia">Número de Guía</label>
+      <input type="text" id="guia" required placeholder="Ingrese número de guía">
+      <label for="admision">Fecha de Admisión</label>
+      <input type="date" id="admision" required>
+      <label for="estimada">Fecha Estimada de Entrega</label>
+      <input type="date" id="estimada" required>
+      <label for="destinoNombre">Nombre Destinatario</label>
+      <input type="text" id="destinoNombre" required>
+      <label for="destinoCedula">Cédula Destinatario</label>
+      <input type="text" id="destinoCedula" required>
+      <label for="destinoCiudad">Ciudad de Destino</label>
+      <input type="text" id="destinoCiudad" required>
+      <label for="destinoDireccion">Dirección Destino</label>
+      <input type="text" id="destinoDireccion" required>
+      <label for="destinoTelefono">Teléfono Destinatario</label>
+      <input type="text" id="destinoTelefono" required>
+      <label for="origenNombre">Nombre Remitente</label>
+      <input type="text" id="origenNombre" required>
+      <label for="origenCiudad">Ciudad de Origen</label>
+      <input type="text" id="origenCiudad" required>
+      <label for="origenTelefono">Teléfono Remitente</label>
+      <input type="text" id="origenTelefono" required>
+      <label for="origenCedula">Cédula Remitente</label>
+      <input type="text" id="origenCedula" required>
+      <label for="origenDireccion">Dirección Origen</label>
+      <input type="text" id="origenDireccion" required>
+      <label for="empaque">Tipo de Empaque</label>
+      <input type="text" id="empaque" required>
+      <button type="submit" class="btn">Añadir Rastreo</button>
+    </form>
+    <div id="rastreoSection" class="form-section" style="display:none;">
+      <h3>Rastreo del Envío</h3>
+      <form id="formActualizacion">
+        <label for="ciudadAct">Ciudad</label>
+        <input type="text" id="ciudadAct" required>
+        <label for="estadoAct">Estado</label>
+        <input type="text" id="estadoAct" required>
+        <label for="motivoAct">Motivo (opcional)</label>
+        <input type="text" id="motivoAct">
+        <label for="fechaAct">Fecha</label>
+        <input type="datetime-local" id="fechaAct" required>
+        <label for="coordenadaAct">Coordenada</label>
+        <input type="text" id="coordenadaAct" required>
+        <button type="submit" class="btn">Añadir Actualización</button>
+      </form>
+      <div class="table-section">
+        <table class="data-table" id="tablaRastreo">
+          <thead>
+            <tr>
+              <th>Ciudad</th>
+              <th>Estado</th>
+              <th>Motivo</th>
+              <th>Fecha</th>
+              <th>Coordenada</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Proteger acceso solo para admin logueado con JWT
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+    const API_BASE = 'https://databaseinterrapidisimo-production.up.railway.app';
+    let documentoActual = null;
+    let guiaActual = null;
+    let rastreosPrevios = [];
+
+    // --- Manejo de documento y rastreos previos ---
+    document.getElementById('formDocumento').onsubmit = async function(e) {
+      e.preventDefault();
+      const doc = document.getElementById('documento').value.trim();
+      if (!doc) return;
+      documentoActual = doc;
+      guiaActual = null;
+      await refreshRastreosPreviosAndSelect();
+      document.getElementById('formRastreo').style.display = '';
+      document.getElementById('rastreoSection').style.display = 'none';
+    };
+
+    async function refreshRastreosPreviosAndSelect(guia) {
+      try {
+        const res = await fetch(`${API_BASE}/rastreos/${documentoActual}`, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('No se pudo consultar rastreos');
+        rastreosPrevios = await res.json();
+        renderRastreosPrevios();
+        document.getElementById('rastreosPrevios').style.display = rastreosPrevios.length ? '' : 'none';
+        if (guia) {
+          const idx = rastreosPrevios.findIndex(r => r.numero_guia === guia);
+          if (idx !== -1) seleccionarRastreo(idx);
+        }
+      } catch (err) {
+        rastreosPrevios = [];
+        document.getElementById('rastreosPrevios').style.display = 'none';
+        alert('Error al consultar rastreos: ' + (err.message || err));
+      }
+    }
+
+    function renderRastreosPrevios() {
+      const tbody = document.getElementById('tablaPrevios');
+      tbody.innerHTML = '';
+      rastreosPrevios.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.numero_guia}</td><td>${r.destino_ciudad || ''}</td><td><button class='btn' onclick='seleccionarRastreo(${idx})'>Seleccionar</button> <button class='btn btn-delete' onclick='eliminarRastreo(${idx})'>Eliminar</button></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.seleccionarRastreo = function(idx) {
+      const r = rastreosPrevios[idx];
+      guiaActual = r.numero_guia;
+      // Rellenar campos del formulario
+      document.getElementById('guia').value = r.numero_guia;
+      document.getElementById('admision').value = r.admision || '';
+      document.getElementById('estimada').value = r.estimada || '';
+      document.getElementById('destinoNombre').value = r.destino_nombre || '';
+      document.getElementById('destinoCedula').value = r.destino_cedula || '';
+      document.getElementById('destinoCiudad').value = r.destino_ciudad || '';
+      document.getElementById('destinoDireccion').value = r.destino_direccion || '';
+      document.getElementById('destinoTelefono').value = r.destino_telefono || '';
+      document.getElementById('origenNombre').value = r.origen_nombre || '';
+      document.getElementById('origenCiudad').value = r.origen_ciudad || '';
+      document.getElementById('origenTelefono').value = r.origen_telefono || '';
+      document.getElementById('origenCedula').value = r.origen_cedula || '';
+      document.getElementById('origenDireccion').value = r.origen_direccion || '';
+      document.getElementById('empaque').value = r.empaque || '';
+      // Actualizaciones
+      let acts = [];
+      try { acts = JSON.parse(r.actualizaciones) || []; } catch { acts = []; }
+      renderTabla(acts);
+      document.getElementById('rastreoSection').style.display = '';
+    };
+
+    // --- Manejo de rastreo (crear) ---
+    document.getElementById('formRastreo').onsubmit = async function(e) {
+      e.preventDefault();
+      if (!documentoActual) return;
+      const guia = document.getElementById('guia').value.trim();
+      if (!guia) return;
+      guiaActual = guia;
+      // Recolectar datos del formulario
+      const rastreo = {
+        numero_guia: guia,
+        documento: documentoActual,
+        admision: document.getElementById('admision').value,
+        estimada: document.getElementById('estimada').value,
+        destino_nombre: document.getElementById('destinoNombre').value,
+        destino_cedula: document.getElementById('destinoCedula').value,
+        destino_ciudad: document.getElementById('destinoCiudad').value,
+        destino_direccion: document.getElementById('destinoDireccion').value,
+        destino_telefono: document.getElementById('destinoTelefono').value,
+        origen_nombre: document.getElementById('origenNombre').value,
+        origen_ciudad: document.getElementById('origenCiudad').value,
+        origen_telefono: document.getElementById('origenTelefono').value,
+        origen_cedula: document.getElementById('origenCedula').value,
+        origen_direccion: document.getElementById('origenDireccion').value,
+        empaque: document.getElementById('empaque').value,
+        actualizaciones: JSON.stringify([])
+      };
+      let existe = rastreosPrevios.find(r => r.numero_guia === guia);
+      if (existe) {
+        seleccionarRastreo(rastreosPrevios.findIndex(r => r.numero_guia === guia));
+        alert('Ya existe un rastreo con esa guía. Selecciónalo de la lista para editar actualizaciones.');
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/rastreos`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify(rastreo)
+        });
+        if (!res.ok) throw new Error('No se pudo guardar el rastreo');
+        await refreshRastreosPreviosAndSelect(guia);
+        alert('Guía añadida: ' + guia);
+      } catch (err) {
+        alert('Error al guardar el rastreo: ' + (err.message || err));
+      }
+    };
+
+    // --- Manejo de actualizaciones de rastreo (PUT) ---
+    document.getElementById('formActualizacion').onsubmit = async function(e) {
+      e.preventDefault();
+      if (!documentoActual || !guiaActual) return;
+      const rastreo = rastreosPrevios.find(r => r.numero_guia === guiaActual);
+      if (!rastreo) return alert('Seleccione un rastreo de la lista');
+      let acts = [];
+      try { acts = JSON.parse(rastreo.actualizaciones) || []; } catch { acts = []; }
+      const act = {
+        ciudad: document.getElementById('ciudadAct').value,
+        estado: document.getElementById('estadoAct').value,
+        motivo: document.getElementById('motivoAct').value,
+        fecha: document.getElementById('fechaAct').value,
+        coordenada: document.getElementById('coordenadaAct').value
+      };
+      acts.push(act);
+      try {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify({ actualizaciones: JSON.stringify(acts) })
+        });
+        if (!res.ok) throw new Error('No se pudo actualizar');
+        await refreshRastreosPreviosAndSelect(guiaActual);
+        document.getElementById('formActualizacion').reset();
+      } catch (err) {
+        alert('Error al actualizar el rastreo: ' + (err.message || err));
+      }
+    };
+
+    // --- Eliminar actualización ---
+    window.eliminarActualizacion = async function(idx) {
+      if (!documentoActual || !guiaActual) return;
+      const rastreo = rastreosPrevios.find(r => r.numero_guia === guiaActual);
+      if (!rastreo) return;
+      let acts = [];
+      try { acts = JSON.parse(rastreo.actualizaciones) || []; } catch { acts = []; }
+      if (!confirm('¿Seguro que desea eliminar esta actualización?')) return;
+      acts.splice(idx, 1);
+      try {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify({ actualizaciones: JSON.stringify(acts) })
+        });
+        if (!res.ok) throw new Error('No se pudo actualizar');
+        await refreshRastreosPreviosAndSelect(guiaActual);
+      } catch (err) {
+        alert('Error al eliminar la actualización: ' + (err.message || err));
+      }
+    }
+
+    window.eliminarRastreo = async function(idx) {
+      if (!confirm('¿Seguro que desea eliminar este rastreo?')) return;
+      const rastreo = rastreosPrevios[idx];
+      if (!rastreo) return;
+      try {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${rastreo.id}`, {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('No se pudo eliminar el rastreo');
+        await refreshRastreosPreviosAndSelect();
+        document.getElementById('rastreoSection').style.display = 'none';
+        guiaActual = null;
+        alert('Rastreo eliminado correctamente.');
+      } catch (err) {
+        alert('Error al eliminar el rastreo: ' + (err.message || err));
+      }
+    }
+
+    // --- Render tabla de actualizaciones ---
+    function renderTabla(acts) {
+      const tbody = document.querySelector('#tablaRastreo tbody');
+      tbody.innerHTML = '';
+      if (!documentoActual || !guiaActual) return;
+      acts.forEach((a, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${a.ciudad}</td><td>${a.estado}</td><td>${a.motivo||''}</td><td>${a.fecha}</td><td>${a.coordenada}</td><td><button class='btn btn-delete' onclick='eliminarActualizacion(${idx})'>Eliminar</button></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
