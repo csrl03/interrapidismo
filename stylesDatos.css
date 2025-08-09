@@ -111,3 +111,46 @@ input, select, textarea {
     max-width: 80px;
   }
 }
+
+/* Estilos para secciones organizadas */
+.section-title {
+  color: #f0572d;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 25px 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0572d;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-group {
+  background-color: #f8f9fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.field-group label {
+  margin-top: 15px;
+}
+
+.field-group label:first-child {
+  margin-top: 0;
+}
+
+.field-group input {
+  margin-bottom: 10px;
+}
+
+/* Mejoras en placeholders */
+input::placeholder {
+  color: #999;
+  opacity: 0.7;
+}
+
+input:focus::placeholder {
+  opacity: 0.4;
+}

@@ -32,34 +32,50 @@
       </table>
     </div>
     <form id="formRastreo" class="form-section" style="display:none;">
-      <label for="guia">Número de Guía</label>
-      <input type="text" id="guia" required placeholder="Ingrese número de guía">
-      <label for="admision">Fecha de Admisión</label>
-      <input type="date" id="admision" required>
-      <label for="estimada">Fecha Estimada de Entrega</label>
-      <input type="date" id="estimada" required>
-      <label for="destinoNombre">Nombre Destinatario</label>
-      <input type="text" id="destinoNombre" required>
-      <label for="destinoCedula">Cédula Destinatario</label>
-      <input type="text" id="destinoCedula" required>
-      <label for="destinoCiudad">Ciudad de Destino</label>
-      <input type="text" id="destinoCiudad" required>
-      <label for="destinoDireccion">Dirección Destino</label>
-      <input type="text" id="destinoDireccion" required>
-      <label for="destinoTelefono">Teléfono Destinatario</label>
-      <input type="text" id="destinoTelefono" required>
-      <label for="origenNombre">Nombre Remitente</label>
-      <input type="text" id="origenNombre" required>
-      <label for="origenCiudad">Ciudad de Origen</label>
-      <input type="text" id="origenCiudad" required>
-      <label for="origenTelefono">Teléfono Remitente</label>
-      <input type="text" id="origenTelefono" required>
-      <label for="origenCedula">Cédula Remitente</label>
-      <input type="text" id="origenCedula" required>
-      <label for="origenDireccion">Dirección Origen</label>
-      <input type="text" id="origenDireccion" required>
-      <label for="empaque">Tipo de Empaque</label>
-      <input type="text" id="empaque" required>
+      <h3 class="section-title">📦 Información General del Envío</h3>
+      <div class="field-group">
+        <label for="guia">Número de Guía</label>
+        <input type="text" id="guia" required placeholder="Ingrese número de guía">
+        <label for="admision">Fecha de Admisión</label>
+        <input type="date" id="admision" required>
+        <label for="estimada">Fecha Estimada de Entrega</label>
+        <input type="date" id="estimada" required>
+      </div>
+
+      <h3 class="section-title">👤 Datos del Destinatario</h3>
+      <div class="field-group">
+        <label for="destinoNombre">Nombre Completo</label>
+        <input type="text" id="destinoNombre" required placeholder="Nombre del destinatario">
+        <label for="destinoCedula">Cédula</label>
+        <input type="text" id="destinoCedula" required placeholder="Número de cédula">
+        <label for="destinoTelefono">Teléfono</label>
+        <input type="text" id="destinoTelefono" required placeholder="Número de contacto">
+        <label for="destinoCiudad">Ciudad</label>
+        <input type="text" id="destinoCiudad" required placeholder="Ciudad de destino">
+        <label for="destinoDireccion">Dirección</label>
+        <input type="text" id="destinoDireccion" required placeholder="Dirección completa">
+      </div>
+
+      <h3 class="section-title">📤 Datos del Remitente</h3>
+      <div class="field-group">
+        <label for="origenNombre">Nombre Completo</label>
+        <input type="text" id="origenNombre" required placeholder="Nombre del remitente">
+        <label for="origenCedula">Cédula</label>
+        <input type="text" id="origenCedula" required placeholder="Número de cédula">
+        <label for="origenTelefono">Teléfono</label>
+        <input type="text" id="origenTelefono" required placeholder="Número de contacto">
+        <label for="origenCiudad">Ciudad</label>
+        <input type="text" id="origenCiudad" required placeholder="Ciudad de origen">
+        <label for="origenDireccion">Dirección</label>
+        <input type="text" id="origenDireccion" required placeholder="Dirección completa">
+      </div>
+
+      <h3 class="section-title">📋 Información del Paquete</h3>
+      <div class="field-group">
+        <label for="empaque">Tipo de Empaque</label>
+        <input type="text" id="empaque" required placeholder="Descripción del empaque">
+      </div>
+
       <button type="submit" class="btn">Añadir Rastreo</button>
     </form>
     <div id="rastreoSection" class="form-section" style="display:none;">
