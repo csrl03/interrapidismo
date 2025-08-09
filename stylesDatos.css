@@ -110,6 +110,24 @@ input, select, textarea {
   .admin-header img {
     max-width: 80px;
   }
+  
+  /* Layout móvil - una columna */
+  .two-column-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .left-column {
+    border-right: none;
+    border-bottom: 2px solid #e5e5e5;
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+  
+  .right-column {
+    padding-left: 0;
+    padding-top: 20px;
+  }
 }
 
 /* Estilos para secciones organizadas */
@@ -153,6 +171,29 @@ input::placeholder {
 
 input:focus::placeholder {
   opacity: 0.4;
+}
+
+/* Layout de dos columnas */
+.two-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.left-column {
+  border-right: 2px solid #e5e5e5;
+  padding-right: 20px;
+}
+
+.right-column {
+  padding-left: 20px;
+}
+
+/* Iconos en lugar de emojis */
+.icon {
+  font-size: 14px;
+  margin-right: 5px;
 }
 
 /* Estilos para Control General */

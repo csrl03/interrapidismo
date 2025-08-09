@@ -1,22 +1,5 @@
-<!DOCTYPE html>    <form id="formDocumento" class="form-section">
-      <label for="documento">Número de Documento</label>
-      <input type="text" id="documento" required placeholder="Ingrese número de documento">
-      <button type="submit" class="btn">Añadir/Seleccionar Documento</button>
-    </form>
-    
-    <!-- Control General de Rastreos -->
-    <div id="controlGeneral" class="form-section">
-      <h3 class="section-title">📊 Control General de Rastreos</h3>
-      <div class="control-actions">
-        <button id="btnRefreshControl" class="btn btn-secondary">🔄 Actualizar Lista</button>
-        <span id="totalRastreos" class="total-counter">Total: 0 rastreos</span>
-      </div>
-      <div id="tablaControlGeneral" class="control-table-container">
-        <p class="loading-message">Cargando datos...</p>
-      </div>
-    </div>
-    
-    <div id="rastreosPrevios" class="form-section" style="display:none;">`l lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,103 +13,130 @@
       <h2>Panel de Administración</h2>
     </div>
     <hr class="divider">
-    <form id="formDocumento" class="form-section">
-      <label for="documento">Número de Documento</label>
-      <input type="text" id="documento" required placeholder="Ingrese número de documento">
-      <button type="submit" class="btn">Añadir/Seleccionar Documento</button>
-    </form>
-    <div id="rastreosPrevios" class="form-section" style="display:none;">
-      <h3>Rastreos asociados</h3>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Guía</th>
-            <th>Destino</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody id="tablaPrevios"></tbody>
-      </table>
-    </div>
-    <form id="formRastreo" class="form-section" style="display:none;">
-      <h3 class="section-title">📦 Información General del Envío</h3>
-      <div class="field-group">
-        <label for="guia">Número de Guía</label>
-        <input type="text" id="guia" required placeholder="Ingrese número de guía">
-        <label for="admision">Fecha de Admisión</label>
-        <input type="date" id="admision" required>
-        <label for="estimada">Fecha Estimada de Entrega</label>
-        <input type="date" id="estimada" required>
+    
+    <!-- Layout de dos columnas -->
+    <div class="two-column-layout">
+      <!-- Columna Izquierda - Control General -->
+      <div class="left-column">
+        <div id="controlGeneral" class="form-section">
+          <h3 class="section-title">Control General de Rastreos</h3>
+          <div class="control-actions">
+            <button id="btnRefreshControl" class="btn btn-secondary">
+              <span class="icon">&#8635;</span> Actualizar Lista
+            </button>
+            <span id="totalRastreos" class="total-counter">Total: 0 rastreos</span>
+          </div>
+          <div id="tablaControlGeneral" class="control-table-container">
+            <p class="loading-message">Cargando datos...</p>
+          </div>
+        </div>
       </div>
+      
+      <!-- Columna Derecha - Formularios -->
+      <div class="right-column">
+        <form id="formDocumento" class="form-section">
+          <label for="documento">Número de Documento</label>
+          <input type="text" id="documento" required placeholder="Ingrese número de documento">
+          <button type="submit" class="btn">Añadir/Seleccionar Documento</button>
+        </form>
+        
+        <div id="rastreosPrevios" class="form-section" style="display:none;">
+          <h3>Rastreos asociados</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Guía</th>
+                <th>Destino</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tablaPrevios"></tbody>
+          </table>
+        </div>
+        
+        <form id="formRastreo" class="form-section" style="display:none;">
+          <h3 class="section-title">Información General del Envío</h3>
+          <div class="field-group">
+            <label for="guia">Número de Guía</label>
+            <input type="text" id="guia" required placeholder="Ingrese número de guía">
+            <label for="admision">Fecha de Admisión</label>
+            <input type="date" id="admision" required>
+            <label for="estimada">Fecha Estimada de Entrega</label>
+            <input type="date" id="estimada" required>
+          </div>
 
-      <h3 class="section-title">👤 Datos del Destinatario</h3>
-      <div class="field-group">
-        <label for="destinoNombre">Nombre Completo</label>
-        <input type="text" id="destinoNombre" required placeholder="Nombre del destinatario">
-        <label for="destinoCedula">Cédula</label>
-        <input type="text" id="destinoCedula" required placeholder="Número de cédula">
-        <label for="destinoTelefono">Teléfono</label>
-        <input type="text" id="destinoTelefono" required placeholder="Número de contacto">
-        <label for="destinoCiudad">Ciudad</label>
-        <input type="text" id="destinoCiudad" required placeholder="Ciudad de destino">
-        <label for="destinoDireccion">Dirección</label>
-        <input type="text" id="destinoDireccion" required placeholder="Dirección completa">
-      </div>
+          <h3 class="section-title">Datos del Destinatario</h3>
+          <div class="field-group">
+            <label for="destinoNombre">Nombre Completo</label>
+            <input type="text" id="destinoNombre" required placeholder="Nombre del destinatario">
+            <label for="destinoCedula">Cédula</label>
+            <input type="text" id="destinoCedula" required placeholder="Número de cédula">
+            <label for="destinoTelefono">Teléfono</label>
+            <input type="text" id="destinoTelefono" required placeholder="Número de contacto">
+            <label for="destinoCiudad">Ciudad</label>
+            <input type="text" id="destinoCiudad" required placeholder="Ciudad de destino">
+            <label for="destinoDireccion">Dirección</label>
+            <input type="text" id="destinoDireccion" required placeholder="Dirección completa">
+          </div>
 
-      <h3 class="section-title">📤 Datos del Remitente</h3>
-      <div class="field-group">
-        <label for="origenNombre">Nombre Completo</label>
-        <input type="text" id="origenNombre" required placeholder="Nombre del remitente">
-        <label for="origenCedula">Cédula</label>
-        <input type="text" id="origenCedula" required placeholder="Número de cédula">
-        <label for="origenTelefono">Teléfono</label>
-        <input type="text" id="origenTelefono" required placeholder="Número de contacto">
-        <label for="origenCiudad">Ciudad</label>
-        <input type="text" id="origenCiudad" required placeholder="Ciudad de origen">
-        <label for="origenDireccion">Dirección</label>
-        <input type="text" id="origenDireccion" required placeholder="Dirección completa">
-      </div>
+          <h3 class="section-title">Datos del Remitente</h3>
+          <div class="field-group">
+            <label for="origenNombre">Nombre Completo</label>
+            <input type="text" id="origenNombre" required placeholder="Nombre del remitente">
+            <label for="origenCedula">Cédula</label>
+            <input type="text" id="origenCedula" required placeholder="Número de cédula">
+            <label for="origenTelefono">Teléfono</label>
+            <input type="text" id="origenTelefono" required placeholder="Número de contacto">
+            <label for="origenCiudad">Ciudad</label>
+            <input type="text" id="origenCiudad" required placeholder="Ciudad de origen">
+            <label for="origenDireccion">Dirección</label>
+            <input type="text" id="origenDireccion" required placeholder="Dirección completa">
+          </div>
 
-      <h3 class="section-title">📋 Información del Paquete</h3>
-      <div class="field-group">
-        <label for="empaque">Tipo de Empaque</label>
-        <input type="text" id="empaque" required placeholder="Descripción del empaque">
-      </div>
+          <h3 class="section-title">Información del Paquete</h3>
+          <div class="field-group">
+            <label for="empaque">Tipo de Empaque</label>
+            <input type="text" id="empaque" required placeholder="Descripción del empaque">
+          </div>
 
-      <button type="submit" class="btn">Añadir Rastreo</button>
-    </form>
-    <div id="rastreoSection" class="form-section" style="display:none;">
-      <h3>Rastreo del Envío</h3>
-      <form id="formActualizacion">
-        <label for="ciudadAct">Ciudad</label>
-        <input type="text" id="ciudadAct" required>
-        <label for="estadoAct">Estado</label>
-        <input type="text" id="estadoAct" required>
-        <label for="motivoAct">Motivo (opcional)</label>
-        <input type="text" id="motivoAct">
-        <label for="fechaAct">Fecha</label>
-        <input type="datetime-local" id="fechaAct" required>
-        <label for="coordenadaAct">Coordenada</label>
-        <input type="text" id="coordenadaAct" required>
-        <button type="submit" class="btn">Añadir Actualización</button>
-      </form>
-      <div class="table-section">
-        <table class="data-table" id="tablaRastreo">
-          <thead>
-            <tr>
-              <th>Ciudad</th>
-              <th>Estado</th>
-              <th>Motivo</th>
-              <th>Fecha</th>
-              <th>Coordenada</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+          <button type="submit" class="btn">Añadir Rastreo</button>
+        </form>
+        
+        <div id="rastreoSection" class="form-section" style="display:none;">
+          <h3>Rastreo del Envío</h3>
+          <form id="formActualizacion">
+            <label for="ciudadAct">Ciudad</label>
+            <input type="text" id="ciudadAct" required>
+            <label for="estadoAct">Estado</label>
+            <input type="text" id="estadoAct" required>
+            <label for="motivoAct">Motivo (opcional)</label>
+            <input type="text" id="motivoAct">
+            <label for="fechaAct">Fecha</label>
+            <input type="datetime-local" id="fechaAct" required>
+            <label for="coordenadaAct">Coordenada</label>
+            <input type="text" id="coordenadaAct" required>
+            <button type="submit" class="btn">Añadir Actualización</button>
+          </form>
+          <div class="table-section">
+            <table class="data-table" id="tablaRastreo">
+              <thead>
+                <tr>
+                  <th>Ciudad</th>
+                  <th>Estado</th>
+                  <th>Motivo</th>
+                  <th>Fecha</th>
+                  <th>Coordenada</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  
   <script>
     // Proteger acceso solo para admin logueado con JWT
     const token = localStorage.getItem('admin_token');
@@ -162,7 +172,7 @@
         html += `
           <div class="control-group">
             <div class="control-group-header">
-              📁 Documento: ${documento} (${rastreos.length} rastreo${rastreos.length !== 1 ? 's' : ''})
+              Documento: ${documento} (${rastreos.length} rastreo${rastreos.length !== 1 ? 's' : ''})
             </div>
             <div class="control-group-content">
         `;
@@ -188,10 +198,10 @@
               </div>
               <div class="control-actions-buttons">
                 <button class="btn btn-small btn-update" onclick="editarRastreoDesdeControl('${documento}', '${rastreo.numero_guia}')">
-                  ✏️ Editar
+                  <span class="icon">&#9998;</span> Editar
                 </button>
                 <button class="btn btn-small btn-delete" onclick="eliminarRastreoDesdeControl(${rastreo.id})">
-                  🗑️ Eliminar
+                  <span class="icon">&#128465;</span> Eliminar
                 </button>
               </div>
             </div>
