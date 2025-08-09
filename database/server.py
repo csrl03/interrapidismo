@@ -35,10 +35,13 @@ def init_db():
             destino_ciudad TEXT,
             destino_nombre TEXT,
             destino_direccion TEXT,
+            destino_cedula TEXT,
+            destino_telefono TEXT,
             origen_ciudad TEXT,
             origen_nombre TEXT,
             origen_direccion TEXT,
             origen_telefono TEXT,
+            origen_cedula TEXT,
             empaque TEXT,
             actualizaciones TEXT
         )
@@ -139,13 +142,13 @@ def crear_rastreo():
     data = request.json
     campos = [
         'numero_guia', 'documento', 'admision', 'estimada', 'destino_ciudad', 'destino_nombre',
-        'destino_direccion', 'origen_ciudad', 'origen_nombre', 'origen_direccion',
-        'origen_telefono', 'empaque', 'actualizaciones'
+        'destino_direccion', 'destino_cedula', 'destino_telefono', 'origen_ciudad', 'origen_nombre', 'origen_direccion',
+        'origen_telefono', 'origen_cedula', 'empaque', 'actualizaciones'
     ]
     valores = [data.get(campo) for campo in campos]
     conn = sqlite3.connect('data.db')
     c = conn.cursor()
-    c.execute('''INSERT INTO rastreos (numero_guia, documento, admision, estimada, destino_ciudad, destino_nombre, destino_direccion, origen_ciudad, origen_nombre, origen_direccion, origen_telefono, empaque, actualizaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', valores)
+    c.execute('''INSERT INTO rastreos (numero_guia, documento, admision, estimada, destino_ciudad, destino_nombre, destino_direccion, destino_cedula, destino_telefono, origen_ciudad, origen_nombre, origen_direccion, origen_telefono, origen_cedula, empaque, actualizaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', valores)
     conn.commit()
     conn.close()
     return jsonify({'status': 'ok'}), 201
@@ -173,9 +176,42 @@ def obtener_rastreos_por_documento(documento):
             'origen_direccion': row[10],
             'origen_telefono': row[11],
             'empaque': row[12],
-            'actualizaciones': row[13]
+            'actualizaciones': row[13],
+            'destino_cedula': row[14],
+            'destino_telefono': row[15],
+            'origen_cedula': row[16]
         })
     return jsonify(rastreos)
+
+@app.route('/rastreo/<numero_guia>', methods=['GET'])
+def obtener_rastreo_por_guia(numero_guia):
+    conn = sqlite3.connect('data.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM rastreos WHERE numero_guia = ?', (numero_guia,))
+    row = c.fetchone()
+    conn.close()
+    if row:
+        return jsonify({
+            'id': row[0],
+            'numero_guia': row[1],
+            'documento': row[2],
+            'admision': row[3],
+            'estimada': row[4],
+            'destino_ciudad': row[5],
+            'destino_nombre': row[6],
+            'destino_direccion': row[7],
+            'origen_ciudad': row[8],
+            'origen_nombre': row[9],
+            'origen_direccion': row[10],
+            'origen_telefono': row[11],
+            'empaque': row[12],
+            'actualizaciones': row[13],
+            'destino_cedula': row[14],
+            'destino_telefono': row[15],
+            'origen_cedula': row[16]
+        })
+    else:
+        return jsonify({'error': 'Rastreo no encontrado'}), 404
 
 @app.route('/rastreos/actualizacion/<int:id_rastreo>', methods=['PUT'])
 @token_required
