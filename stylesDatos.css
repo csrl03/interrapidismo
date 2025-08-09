@@ -4,12 +4,10 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #e5f1f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   min-height: 100vh;
   padding: 20px;
+  box-sizing: border-box;
+  overflow-x: auto; /* Scroll horizontal si es necesario */
 }
 
 .admin-container {
@@ -17,9 +15,11 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   padding: 32px 28px;
-  max-width: 800px;
+  min-width: 1200px; /* Ancho mínimo para dos columnas */
+  max-width: 95vw; /* Máximo 95% del viewport */
   width: 100%;
-  margin: 30px auto;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .admin-header {
@@ -61,6 +61,7 @@ input, select, textarea {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 15px;
+  box-sizing: border-box; /* Incluye padding y border en el ancho */
 }
 
 .btn {
@@ -80,18 +81,24 @@ input, select, textarea {
 
 .table-section {
   margin-top: 30px;
+  overflow-x: auto;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  min-width: 400px; /* Ancho mínimo para evitar aplastamiento */
 }
 
 .data-table th, .data-table td {
   border: 1px solid #e5e5e5;
   padding: 8px 6px;
   text-align: left;
+  white-space: nowrap; /* Evita que el texto se rompa */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* Limita el ancho máximo de las celdas */
 }
 
 .data-table th {
@@ -103,18 +110,16 @@ input, select, textarea {
   background-color: #f9f9f9;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1200px) {
   .admin-container {
-    padding: 12px 2vw;
-  }
-  .admin-header img {
-    max-width: 80px;
+    min-width: 95vw;
+    padding: 20px 15px;
   }
   
-  /* Layout móvil - una columna */
   .two-column-layout {
     grid-template-columns: 1fr;
     gap: 20px;
+    overflow-x: visible;
   }
   
   .left-column {
@@ -122,11 +127,29 @@ input, select, textarea {
     border-bottom: 2px solid #e5e5e5;
     padding-right: 0;
     padding-bottom: 20px;
+    min-width: auto;
   }
   
   .right-column {
     padding-left: 0;
     padding-top: 20px;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-container {
+    padding: 12px 2vw;
+    min-width: 95vw;
+  }
+  .admin-header img {
+    max-width: 80px;
+  }
+  
+  .data-table th, .data-table td {
+    padding: 6px 4px;
+    font-size: 12px;
+    max-width: 100px;
   }
 }
 
@@ -176,18 +199,23 @@ input:focus::placeholder {
 /* Layout de dos columnas */
 .two-column-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(400px, 1fr) minmax(500px, 1fr);
   gap: 30px;
   margin-top: 20px;
+  overflow-x: auto;
 }
 
 .left-column {
   border-right: 2px solid #e5e5e5;
   padding-right: 20px;
+  min-width: 400px;
+  overflow-x: auto;
 }
 
 .right-column {
   padding-left: 20px;
+  min-width: 500px;
+  overflow-x: auto;
 }
 
 /* Iconos en lugar de emojis */
