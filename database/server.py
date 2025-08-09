@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -212,6 +213,51 @@ def obtener_rastreo_por_guia(numero_guia):
         })
     else:
         return jsonify({'error': 'Rastreo no encontrado'}), 404
+
+@app.route('/control-general', methods=['GET'])
+@token_required
+def control_general_rastreos():
+    conn = sqlite3.connect('data.db')
+    c = conn.cursor()
+    c.execute('''SELECT id, numero_guia, documento, destino_ciudad, destino_nombre, destino_cedula, 
+                        origen_ciudad, origen_nombre, origen_cedula, admision, estimada, 
+                        actualizaciones FROM rastreos ORDER BY documento''')
+    rows = c.fetchall()
+    conn.close()
+    
+    # Agrupar por documento (cédula)
+    rastreos_agrupados = {}
+    for row in rows:
+        documento = row[2]
+        if documento not in rastreos_agrupados:
+            rastreos_agrupados[documento] = []
+        
+        # Calcular estado actual del rastreo
+        actualizaciones_str = row[11] or '[]'
+        try:
+            actualizaciones = json.loads(actualizaciones_str)
+            ultimo_estado = actualizaciones[-1]['estado'] if actualizaciones else 'Sin actualizaciones'
+            ultima_ciudad = actualizaciones[-1]['ciudad'] if actualizaciones else 'N/A'
+        except:
+            ultimo_estado = 'Sin actualizaciones'
+            ultima_ciudad = 'N/A'
+        
+        rastreos_agrupados[documento].append({
+            'id': row[0],
+            'numero_guia': row[1],
+            'destino_ciudad': row[3],
+            'destino_nombre': row[4],
+            'destino_cedula': row[5],
+            'origen_ciudad': row[6],
+            'origen_nombre': row[7],
+            'origen_cedula': row[8],
+            'admision': row[9],
+            'estimada': row[10],
+            'ultimo_estado': ultimo_estado,
+            'ultima_ciudad': ultima_ciudad
+        })
+    
+    return jsonify(rastreos_agrupados)
 
 @app.route('/rastreos/actualizacion/<int:id_rastreo>', methods=['PUT'])
 @token_required

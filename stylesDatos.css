@@ -154,3 +154,109 @@ input::placeholder {
 input:focus::placeholder {
   opacity: 0.4;
 }
+
+/* Estilos para Control General */
+.control-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+
+.total-counter {
+  font-weight: bold;
+  color: #f0572d;
+  font-size: 16px;
+}
+
+.control-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.control-group {
+  margin-bottom: 20px;
+  border: 1px solid #d4edda;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.control-group-header {
+  background-color: #d1ecf1;
+  padding: 12px 15px;
+  font-weight: bold;
+  color: #0c5460;
+  border-bottom: 1px solid #bee5eb;
+}
+
+.control-group-content {
+  background-color: #fff;
+}
+
+.control-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f1f1;
+  align-items: center;
+}
+
+.control-item:last-child {
+  border-bottom: none;
+}
+
+.control-item:hover {
+  background-color: #f8f9fa;
+}
+
+.control-field {
+  font-size: 14px;
+}
+
+.control-field strong {
+  color: #495057;
+}
+
+.control-actions-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-small {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.btn-update {
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  color: white;
+}
+
+.btn-update:hover {
+  background-color: #218838;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+}

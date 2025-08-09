@@ -1,5 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html>    <form id="formDocumento" class="form-section">
+      <label for="documento">Número de Documento</label>
+      <input type="text" id="documento" required placeholder="Ingrese número de documento">
+      <button type="submit" class="btn">Añadir/Seleccionar Documento</button>
+    </form>
+    
+    <!-- Control General de Rastreos -->
+    <div id="controlGeneral" class="form-section">
+      <h3 class="section-title">📊 Control General de Rastreos</h3>
+      <div class="control-actions">
+        <button id="btnRefreshControl" class="btn btn-secondary">🔄 Actualizar Lista</button>
+        <span id="totalRastreos" class="total-counter">Total: 0 rastreos</span>
+      </div>
+      <div id="tablaControlGeneral" class="control-table-container">
+        <p class="loading-message">Cargando datos...</p>
+      </div>
+    </div>
+    
+    <div id="rastreosPrevios" class="form-section" style="display:none;">`l lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -121,6 +138,112 @@
     let guiaActual = null;
     let rastreosPrevios = [];
 
+    // --- Control General de Rastreos ---
+    async function cargarControlGeneral() {
+      try {
+        document.getElementById('tablaControlGeneral').innerHTML = '<p class="loading-message">Cargando datos...</p>';
+        const res = await fetch(`${API_BASE}/control-general`, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('No se pudo cargar el control general');
+        const datosAgrupados = await res.json();
+        renderControlGeneral(datosAgrupados);
+      } catch (err) {
+        document.getElementById('tablaControlGeneral').innerHTML = `<p class="loading-message">Error: ${err.message}</p>`;
+      }
+    }
+
+    function renderControlGeneral(datosAgrupados) {
+      let totalRastreos = 0;
+      let html = '';
+      
+      for (const [documento, rastreos] of Object.entries(datosAgrupados)) {
+        totalRastreos += rastreos.length;
+        html += `
+          <div class="control-group">
+            <div class="control-group-header">
+              📁 Documento: ${documento} (${rastreos.length} rastreo${rastreos.length !== 1 ? 's' : ''})
+            </div>
+            <div class="control-group-content">
+        `;
+        
+        rastreos.forEach(rastreo => {
+          html += `
+            <div class="control-item">
+              <div class="control-field">
+                <strong>Guía:</strong> ${rastreo.numero_guia}<br>
+                <strong>Fecha:</strong> ${rastreo.admision || 'N/A'}
+              </div>
+              <div class="control-field">
+                <strong>Origen:</strong> ${rastreo.origen_nombre || 'N/A'}<br>
+                <strong>Ciudad:</strong> ${rastreo.origen_ciudad || 'N/A'}
+              </div>
+              <div class="control-field">
+                <strong>Destino:</strong> ${rastreo.destino_nombre || 'N/A'}<br>
+                <strong>Ciudad:</strong> ${rastreo.destino_ciudad || 'N/A'}
+              </div>
+              <div class="control-field">
+                <strong>Estado:</strong> ${rastreo.ultimo_estado}<br>
+                <strong>Ubicación:</strong> ${rastreo.ultima_ciudad}
+              </div>
+              <div class="control-actions-buttons">
+                <button class="btn btn-small btn-update" onclick="editarRastreoDesdeControl('${documento}', '${rastreo.numero_guia}')">
+                  ✏️ Editar
+                </button>
+                <button class="btn btn-small btn-delete" onclick="eliminarRastreoDesdeControl(${rastreo.id})">
+                  🗑️ Eliminar
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+          </div>
+        `;
+      }
+      
+      if (html === '') {
+        html = '<p class="loading-message">No hay rastreos registrados</p>';
+      }
+      
+      document.getElementById('tablaControlGeneral').innerHTML = html;
+      document.getElementById('totalRastreos').textContent = `Total: ${totalRastreos} rastreo${totalRastreos !== 1 ? 's' : ''}`;
+    }
+
+    window.editarRastreoDesdeControl = async function(documento, numeroGuia) {
+      // Llenar el campo documento y cargar rastreos
+      document.getElementById('documento').value = documento;
+      documentoActual = documento;
+      await refreshRastreosPreviosAndSelect(numeroGuia);
+      document.getElementById('formRastreo').style.display = '';
+      
+      // Scroll hacia el formulario
+      document.getElementById('formRastreo').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.eliminarRastreoDesdeControl = async function(id) {
+      if (!confirm('¿Está seguro de que desea eliminar este rastreo?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/rastreos/actualizacion/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('No se pudo eliminar el rastreo');
+        alert('Rastreo eliminado correctamente');
+        cargarControlGeneral(); // Recargar la lista
+      } catch (err) {
+        alert('Error al eliminar: ' + err.message);
+      }
+    };
+
+    // Evento para botón de refresh
+    document.getElementById('btnRefreshControl').onclick = cargarControlGeneral;
+
+    // Cargar control general al iniciar
+    cargarControlGeneral();
+
     // --- Manejo de documento y rastreos previos ---
     document.getElementById('formDocumento').onsubmit = async function(e) {
       e.preventDefault();
@@ -231,6 +354,7 @@
         });
         if (!res.ok) throw new Error('No se pudo guardar el rastreo');
         await refreshRastreosPreviosAndSelect(guia);
+        cargarControlGeneral(); // Actualizar control general
         alert('Guía añadida: ' + guia);
       } catch (err) {
         alert('Error al guardar el rastreo: ' + (err.message || err));
@@ -306,6 +430,7 @@
         });
         if (!res.ok) throw new Error('No se pudo eliminar el rastreo');
         await refreshRastreosPreviosAndSelect();
+        cargarControlGeneral(); // Actualizar control general
         document.getElementById('rastreoSection').style.display = 'none';
         guiaActual = null;
         alert('Rastreo eliminado correctamente.');
